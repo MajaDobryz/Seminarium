@@ -1,26 +1,20 @@
-const http = require('http')
+const express = require('express')
 
-const server = http.createServer(onRequest)
+const app = express()
+const PORT = 8080
 
-function onRequest(req, res) {
-  if (req.url === '/') {
-    return getBase(req, res)
-  } else if (req.url === '/boop') {
-    return getBoop(req, res)
-  }
+app.get('/', (req, res) => {
+  res.send('hello')
+})
 
-  res.writeHead(404, {'Content-Type': 'text/plain'})
-  res.end('not found')
-}
+app.get('/boop', (req, res) => {
+  res.send('boop the snoot')
+})
 
-function getBase(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'})
-  res.end('hello')
-}
+app.use((req, res) => {
+  res.status(404).send('not found')
+})
 
-function getBoop(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'})
-  res.end('boop the snoot')
-}
-
-server.listen(8080)
+app.listen(PORT, () => {
+  console.log(`listening on http://localhost:${PORT}`)
+})
